@@ -16,7 +16,7 @@ export class ImageWindow extends UI.Window {
         var url = ApiService.THUMB_URL + post.thumb;
         console.log(`img src 1 = ${url}`);
 
-		url = 'http://utils.bzeutzheim.de/img2pebble.php?url=' + encodeURI(url);
+        url = 'http://utils.bzeutzheim.de/img2pebble.php?url=' + encodeURI(url);
         console.log(`img src 2 = ${url}`);
 
         this.image = new UI.Image({

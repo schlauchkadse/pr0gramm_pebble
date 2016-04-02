@@ -9,19 +9,19 @@ import {MainCard} from './ui/MainCard';
 import {BenisCard} from './ui/BenisCard';
 
 Settings.config(
-	{
-		url: 'http://pebble.analsheep.de/pr0settings.html',
-		autoSave: true
-	},
-	(e) => {
-		ApiService.save();
-	},
-	(event) => {
-		ApiService.load();
-		ApiService.update();
-		if (SplashWindow.settingsMenu)
-			SplashWindow.settingsMenu.update();
-	}
+       {
+              url: 'http://pebble.analsheep.de/pr0settings.html',
+              autoSave: true
+       },
+       (e) => {
+              ApiService.save();
+       },
+       (event) => {
+              ApiService.load();
+              ApiService.update();
+              if (SplashWindow.settingsMenu)
+                     SplashWindow.settingsMenu.update();
+       }
 );
 
 class App {
