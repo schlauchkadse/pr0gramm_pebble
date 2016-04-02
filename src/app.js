@@ -53,6 +53,7 @@ var ApiService;
     ApiService.THUMB_URL = "http://thumb.pr0gramm.com/";
     ApiService.URL_ITEMS = ApiService.BASE_URL + "items/get";
     ApiService.URL_INFO = ApiService.BASE_URL + "items/info";
+    ApiService.URL_USER = ApiService.BASE_URL + "profile/info?name=";
     ApiService.flags = Flags.ALL;
     ApiService.promoted = false;
     ApiService.updateInterval = 10;
@@ -251,19 +252,42 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var UI = require('ui');
+var ApiService_1 = require('../core/ApiService');
 var BenisCard = (function (_super) {
     __extends(BenisCard, _super);
     function BenisCard() {
+        var _this = this;
         _super.call(this, {
             title: 'Pr0 Benis',
-            subtitle: '...',
+            subtitle: ApiService_1.ApiService.username,
+        });
+        this.visible = false;
+        this.on('show', function () {
+            _this.visible = true;
+            _this.update();
+        });
+        this.on('hide', function () {
+            _this.visible = false;
+        });
+        ApiService_1.ApiService.latestPostsObserver.subscribe(function (data) {
+            if (_this.visible)
+                _this.update();
         });
     }
+    BenisCard.prototype.update = function () {
+        var _this = this;
+        if (!ApiService_1.ApiService.username || ApiService_1.ApiService.username.length === 0)
+            this.subtitle('Kein Benutzer');
+        ApiService_1.ApiService.ajaxPromiseJson(ApiService_1.ApiService.URL_USER + ApiService_1.ApiService.username).then(function (response) {
+            var data = response.body;
+            _this.body("Benis: " + data.user.score);
+        });
+    };
     return BenisCard;
 }(UI.Card));
 exports.BenisCard = BenisCard;
 
-},{"ui":undefined}],5:[function(require,module,exports){
+},{"../core/ApiService":2,"ui":undefined}],5:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];

@@ -26,6 +26,8 @@ export module ApiService {
 
     export const URL_INFO = `${BASE_URL}items/info`;
 
+    export const URL_USER = `${BASE_URL}profile/info?name=`;
+
     // Settings
 
     export var username: string;
