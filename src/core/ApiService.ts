@@ -28,7 +28,7 @@ export module ApiService {
 
     // Settings
 
-	export var username: string;
+    export var username: string;
 
     export var flags: number = Flags.ALL; // Flags.SFW | Flags.NSFL;
 
@@ -64,7 +64,7 @@ export module ApiService {
     }
 
     export function load() {
-		username = Settings.option('username') || '';
+        username = Settings.option('username') || '';
         flags = Settings.option('flags') || (Flags.SFW | Flags.NSFL);
         setUpdateInterval(Settings.option('interval') || 10);
         promoted = Settings.option('promoted') ? true : false;
@@ -72,7 +72,7 @@ export module ApiService {
 
     export function save() {
         Settings.option('username', username);
-		Settings.option('flags', flags);
+        Settings.option('flags', flags);
         Settings.option('interval', updateInterval);
         Settings.option('promoted', promoted);
     }
