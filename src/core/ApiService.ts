@@ -36,6 +36,8 @@ export module ApiService {
 
     export var promoted: boolean = false;
 
+    export var fetchListTags: boolean = true;
+
     export var updateInterval: number = 10;
 
     // Other stuff
@@ -70,6 +72,7 @@ export module ApiService {
         flags = Settings.option('flags') || (Flags.SFW | Flags.NSFL);
         setUpdateInterval(Settings.option('interval') || 10);
         promoted = Settings.option('promoted') ? true : false;
+        fetchListTags = Settings.option('fetchListTags') ? true : false;
     }
 
     export function save() {
@@ -77,6 +80,7 @@ export module ApiService {
         Settings.option('flags', flags);
         Settings.option('interval', updateInterval);
         Settings.option('promoted', promoted);
+        Settings.option('fetchListTags', fetchListTags);
     }
 
     export function setUpdateInterval(value: number) {
@@ -116,6 +120,7 @@ export module ApiService {
     }
 
     export function updateInfos() {
+		console.log('fetching infos...');
         return new Promise<void>((resolve, reject) => {
             var index: number = 0;
             function fetchInfo() {

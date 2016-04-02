@@ -10,7 +10,7 @@ export class ImageWindow extends UI.Window {
     constructor(post: IPost) {
         super({
             backgroundColor: 'black',
-            fullscreen: false,
+            fullscreen: true,
             scrollable: false,
         });
         var url = ApiService.THUMB_URL + post.thumb;
@@ -21,7 +21,7 @@ export class ImageWindow extends UI.Window {
 
         this.image = new UI.Image({
             image: url,
-            // size: new Vector2(144, 168),
+            size: new Vector2(144, 168),
             position: new Vector2(0, 0)
         });
         this.add(this.image);

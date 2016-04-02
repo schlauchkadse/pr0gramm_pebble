@@ -37,7 +37,7 @@ export class LatestPostsMenu extends UI.Menu {
 
         ApiService.latestPostsObserver.subscribe((data) => {
             this.updateItems();
-            if (this.visible) {
+            if (this.visible && ApiService.fetchListTags) {
                 console.log('Updating infos in visible list');
                 ApiService.updateInfos().then(() => {
                     this.updateItems();
@@ -54,12 +54,12 @@ export class LatestPostsMenu extends UI.Menu {
         }
         this.menuItems = [];
         ApiService.latestPosts.items.forEach((item) => {
-            var listItem = {
-                title: `${item.up - item.down}: ${item.user}`,
-                subtitle: `...`,
-            };
-            if (item.info)
-                listItem.subtitle = ApiService.formatTags(item.info.tags, 4, 0.1);
+            var listItem: pebblejs.UI.IMenuItem = { title: `${item.up - item.down}: ${item.user}` };
+            if (ApiService.fetchListTags) {
+                listItem.subtitle = '...';
+                if (item.info)
+                    listItem.subtitle = ApiService.formatTags(item.info.tags, 4, 0.1);
+            }
             this.menuItems.push(listItem);
         });
         this.items(0, this.menuItems);
@@ -67,9 +67,11 @@ export class LatestPostsMenu extends UI.Menu {
 
     public show(): pebblejs.UI.Menu {
         this.updateItems();
-        ApiService.updateInfos().then(() => {
-            this.updateItems();
-        });
+        if (ApiService.fetchListTags) {
+            ApiService.updateInfos().then(() => {
+                this.updateItems();
+            });
+        }
         super.show();
         return this;
     }

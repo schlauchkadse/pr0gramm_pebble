@@ -27,6 +27,7 @@ var App = (function () {
         this.tabs.addTab(this.mainCard);
         this.tabs.addTab(this.benisCard);
         this.tabs.show();
+        ApiService_1.ApiService.update();
     }
     return App;
 }());
@@ -56,6 +57,7 @@ var ApiService;
     ApiService.URL_USER = ApiService.BASE_URL + "profile/info?name=";
     ApiService.flags = Flags.ALL;
     ApiService.promoted = false;
+    ApiService.fetchListTags = true;
     ApiService.updateInterval = 10;
     ApiService.updatePromise = null;
     ApiService.postMap = {};
@@ -71,6 +73,7 @@ var ApiService;
         ApiService.flags = Settings.option('flags') || (Flags.SFW | Flags.NSFL);
         setUpdateInterval(Settings.option('interval') || 10);
         ApiService.promoted = Settings.option('promoted') ? true : false;
+        ApiService.fetchListTags = Settings.option('fetchListTags') ? true : false;
     }
     ApiService.load = load;
     function save() {
@@ -78,6 +81,7 @@ var ApiService;
         Settings.option('flags', ApiService.flags);
         Settings.option('interval', ApiService.updateInterval);
         Settings.option('promoted', ApiService.promoted);
+        Settings.option('fetchListTags', ApiService.fetchListTags);
     }
     ApiService.save = save;
     function setUpdateInterval(value) {
@@ -119,6 +123,7 @@ var ApiService;
     }
     ApiService.toggleFlag = toggleFlag;
     function updateInfos() {
+        console.log('fetching infos...');
         return new es6_promise_1.Promise(function (resolve, reject) {
             var index = 0;
             function fetchInfo() {
@@ -332,7 +337,7 @@ var ImageWindow = (function (_super) {
     function ImageWindow(post) {
         _super.call(this, {
             backgroundColor: 'black',
-            fullscreen: false,
+            fullscreen: true,
             scrollable: false,
         });
         var url = ApiService_1.ApiService.THUMB_URL + post.thumb;
@@ -341,6 +346,7 @@ var ImageWindow = (function (_super) {
         console.log("img src 2 = " + url);
         this.image = new UI.Image({
             image: url,
+            size: new Vector2(144, 168),
             position: new Vector2(0, 0)
         });
         this.add(this.image);
@@ -389,7 +395,7 @@ var LatestPostsMenu = (function (_super) {
         });
         ApiService_1.ApiService.latestPostsObserver.subscribe(function (data) {
             _this.updateItems();
-            if (_this.visible) {
+            if (_this.visible && ApiService_1.ApiService.fetchListTags) {
                 console.log('Updating infos in visible list');
                 ApiService_1.ApiService.updateInfos().then(function () {
                     _this.updateItems();
@@ -406,12 +412,12 @@ var LatestPostsMenu = (function (_super) {
         }
         this.menuItems = [];
         ApiService_1.ApiService.latestPosts.items.forEach(function (item) {
-            var listItem = {
-                title: (item.up - item.down) + ": " + item.user,
-                subtitle: "...",
-            };
-            if (item.info)
-                listItem.subtitle = ApiService_1.ApiService.formatTags(item.info.tags, 4, 0.1);
+            var listItem = { title: (item.up - item.down) + ": " + item.user };
+            if (ApiService_1.ApiService.fetchListTags) {
+                listItem.subtitle = '...';
+                if (item.info)
+                    listItem.subtitle = ApiService_1.ApiService.formatTags(item.info.tags, 4, 0.1);
+            }
             _this.menuItems.push(listItem);
         });
         this.items(0, this.menuItems);
@@ -419,9 +425,11 @@ var LatestPostsMenu = (function (_super) {
     LatestPostsMenu.prototype.show = function () {
         var _this = this;
         this.updateItems();
-        ApiService_1.ApiService.updateInfos().then(function () {
-            _this.updateItems();
-        });
+        if (ApiService_1.ApiService.fetchListTags) {
+            ApiService_1.ApiService.updateInfos().then(function () {
+                _this.updateItems();
+            });
+        }
         _super.prototype.show.call(this);
         return this;
     };
@@ -513,6 +521,9 @@ var SettingsMenu = (function (_super) {
                 case 4:
                     ApiService_1.ApiService.setUpdateInterval(updateIntervalList[ApiService_1.ApiService.updateInterval] || 10);
                     break;
+                case 5:
+                    ApiService_1.ApiService.fetchListTags = !ApiService_1.ApiService.fetchListTags;
+                    break;
             }
             ApiService_1.ApiService.save();
             _this.update();
@@ -539,6 +550,10 @@ var SettingsMenu = (function (_super) {
             {
                 title: 'Update Interval',
                 subtitle: ApiService_1.ApiService.updateInterval.toString(),
+            },
+            {
+                title: 'Tags in Liste',
+                subtitle: ApiService_1.ApiService.fetchListTags ? 'An' : 'Aus',
             },
         ];
         this.items(0, listItems);

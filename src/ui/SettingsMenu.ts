@@ -43,6 +43,9 @@ export class SettingsMenu extends UI.Menu {
                 case 4:
                     ApiService.setUpdateInterval(updateIntervalList[ApiService.updateInterval] || 10);
                     break;
+                case 5:
+                    ApiService.fetchListTags = !ApiService.fetchListTags;
+                    break;
             }
             ApiService.save();
             this.update();
@@ -70,6 +73,10 @@ export class SettingsMenu extends UI.Menu {
             {
                 title: 'Update Interval',
                 subtitle: ApiService.updateInterval.toString(),
+            },
+            {
+                title: 'Tags in Liste',
+                subtitle: ApiService.fetchListTags ? 'An' : 'Aus',
             },
         ];
         this.items(0, listItems);

@@ -39,6 +39,7 @@ class App {
         this.tabs.addTab(this.mainCard);
         this.tabs.addTab(this.benisCard);
         this.tabs.show();
+		ApiService.update();
     }
 }
 
