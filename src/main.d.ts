@@ -38,9 +38,9 @@ interface IPost {
     flags: number;
     user: string;
     mark: boolean;
-       // Non API
-       info?: IPostInfo;
-       index?: number;
+    // Non API
+    info?: IPostInfo;
+    index?: number;
 }
 
 interface ILatestPosts {
