@@ -1,0 +1,10 @@
+
+*.js.map
+
+# Ignore the Node Modules folder
+# /src/node_modules
+# /src/jspm_packages
+
+# keep these files
+# !jspm.config.js
+!gulpfile.js

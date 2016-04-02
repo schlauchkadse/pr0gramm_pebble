@@ -1,0 +1,5 @@
+*.js.map
+
+/build/
+/node_modules/
+/emulator/

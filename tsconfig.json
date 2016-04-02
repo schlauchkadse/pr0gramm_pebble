@@ -1,0 +1,47 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": false,
+        "noImplicitAny": false,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "removeComments": true,
+        "outDir": "build"
+    },
+    "filesGlob": [
+        "typings/main.d.ts",
+        "src/main.d.ts",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "!node_modules/**",
+        "!jspm_packages/**"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "files": [
+        "typings/main.d.ts",
+        "src/main.d.ts",
+        "src/boot.ts",
+        "src/core/ApiService.ts",
+        "src/lib/observer.ts",
+        "src/ui/BenisCard.ts",
+        "src/ui/DetailCard.ts",
+        "src/ui/ImageWindow.ts",
+        "src/ui/LatestPostsMenu.ts",
+        "src/ui/MainCard.ts",
+        "src/ui/SettingsMenu.ts",
+        "src/ui/SplashWindow.ts",
+        "src/ui/Tabs.ts"
+    ],
+    "atom": {
+        "rewriteTsconfig": true
+    }
+}
